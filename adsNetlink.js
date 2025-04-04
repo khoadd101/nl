@@ -733,7 +733,7 @@ function NetlinkAdsense(_adClient, _adSlot, _adSize=[], _responsive=0, _element,
         <ins class="adsbygoogle"
           style="display:inline-block;width:${ad_width}px;height:${ad_height}px"
           data-ad-client=${_adClient}
-          data-ad-slot=${_adSlot}>
+          data-ad-slot=${_adSlot}
        </ins>
       </center>
     </div>`;
@@ -743,7 +743,7 @@ function NetlinkAdsense(_adClient, _adSlot, _adSize=[], _responsive=0, _element,
         <ins class="adsbygoogle"
           style="display:block"
           data-ad-client=${_adClient}
-          data-ad-slot=${_adSlot}>
+          data-ad-slot=${_adSlot}
           data-ad-format="auto"
           data-full-width-responsive="true">
         </ins>
