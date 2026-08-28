@@ -847,6 +847,74 @@ function NetlinkAdsenseFirstView(_adClient, _adSlot, _adSize = [300, 600]) {
   }, 1000);
 }
 
+function NetlinkAdsenseInImage(_adClient, _adSlot, _adSize, _element, _image = 1, _marginBottom=0) {
+  var normalizedElement = null;
+  if (_element) {
+    if (_element.indexOf('>') === -1 && _element.indexOf('.') === -1 && _element.indexOf('#') === -1) {
+      normalizedElement = _element.trim().split(/\s+/).map(function(c) {
+        return '.' + c;
+      }).join('');
+    } else {
+      normalizedElement = _element;
+    }
+  }
+
+  var contentArea = normalizedElement ? document.body.querySelector(normalizedElement) : document.body;
+  if (!contentArea) return;
+
+  var images = contentArea.querySelectorAll('img');
+  var image = images[_image - 1];
+  if (image == undefined) return;
+
+  checkAdsenseJSExists(_adClient);
+
+  var ad_width = _adSize[0];
+  var ad_height = _adSize[1];
+
+  var netlink_inImage = document.createElement("div");
+  netlink_inImage.className = "netlink-inimage-ad";
+  netlink_inImage.style.cssText = `position:relative;`;
+
+  var inImage_Ad = document.createElement("div");
+  inImage_Ad.style.cssText = `position:absolute;bottom:${_marginBottom}px;z-index:10;width:100%;`;
+
+  var divAdsCenter = document.createElement("center");
+
+  var insAd = document.createElement("ins");
+  insAd.className = "adsbygoogle";
+  insAd.style.cssText = `display:inline-block;width:${ad_width}px;height:${ad_height}px`;
+  insAd.setAttribute("data-ad-client", _adClient);
+  insAd.setAttribute("data-ad-slot", _adSlot);
+
+  var inImage_Close = document.createElement("span");
+  inImage_Close.innerHTML = "×";
+  inImage_Close.style.cssText = "position:absolute;display:none;z-index:1;width:25px !important;height:25px !important;right:2px !important;top:-27px !important;cursor:pointer;font-size:20px;text-align:center;background:white;padding:2px;border-radius:20px;line-height:1;";
+
+  divAdsCenter.appendChild(insAd);
+  inImage_Ad.appendChild(divAdsCenter);
+  inImage_Ad.appendChild(inImage_Close);
+
+  netlink_inImage.appendChild(inImage_Ad);
+
+  image.insertAdjacentElement("afterend", netlink_inImage);
+
+  (adsbygoogle = window.adsbygoogle || []).push({});
+
+  var timeout = 0;
+  var interval = setInterval(function () {
+    if (insAd.getAttribute("data-ad-status") == "filled") {
+      inImage_Close.style.display = "block";
+      clearInterval(interval);
+    }
+    if(++timeout > 600)
+      clearInterval(interval);
+  }, 1000);
+
+  inImage_Close.addEventListener("click", function () {
+    netlink_inImage.style.visibility = "hidden";
+  });
+}
+
 //===========================================================================//
 //===========================================================================//
 //===========================================================================//
